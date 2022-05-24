@@ -18,7 +18,8 @@ Search Engine uses a number of open source projects to work properly:
 
 After cloning the repository, Search Engine will additionally need:
 - nlohmann library in root directory,
-- config.json, requests.json & answers.json in ../out/build directory to run.
+- config.json, requests.json & answers.json in ../out/build directory
+- text files to be searched in ../out/build/resources.
 
 ## Example
 
