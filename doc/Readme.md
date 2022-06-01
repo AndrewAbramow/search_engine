@@ -23,11 +23,15 @@ Search Engine uses a number of open source projects to work properly:
 
 git clone https://github.com/AndrewAbramow/search_engine.git
 cd search_engine
-cmake -S . -B build
-cmake --build build
-cmake --build build -t test
+mkdir build
+cd build
+cmake ..
 
-## Example
+## Usage
 
-An example of usage is given in search_engine.cpp
+- In config.json, set the names of the files to be searched
+- In requests.json, set the searched words
+- cd ../search_engine/build/Mingw64-Release
+-  ./search_engine.exe
+- The answer will be waiting for you in the answers.json
 
