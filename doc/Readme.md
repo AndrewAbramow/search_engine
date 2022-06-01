@@ -21,11 +21,11 @@ Search Engine uses a number of open source projects to work properly:
 
 ## Installation
 
-git clone https://github.com/AndrewAbramow/search_engine.git
-cd search_engine
-mkdir build
-cd build
-cmake ..
+- git clone https://github.com/AndrewAbramow/search_engine.git
+- cd search_engine
+- mkdir build
+- cd build
+- cmake ..
 
 ## Usage
 
