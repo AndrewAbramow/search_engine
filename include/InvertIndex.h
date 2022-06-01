@@ -20,8 +20,14 @@ std::vector<std::string> ParseDocs(std::string line);
 
 size_t Count(std::string word, std::string line);
 
-void Indexing(size_t textId, std::vector<std::string> docs,
+std::map<std::string, std::map<size_t, size_t>> ToOrderedDictionary(
 	std::map<std::string, std::vector<Entry>>& freqDictionary);
+
+std::map<std::string, std::vector<Entry>> ToFreqDictionary(
+	std::map<std::string, std::map<size_t, size_t>>& orderedDictionary);
+
+void Indexing(size_t textId, std::vector<std::string> docs,
+	std::map<std::string, std::map<size_t, size_t>>& orderedDictionary);
 
 class InvertedIndex 
 {

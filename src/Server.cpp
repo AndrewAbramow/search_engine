@@ -5,8 +5,8 @@
 #include <cmath>
 #include <algorithm>
 #include <unordered_set>
-#include "InvertIndex.h"
-#include "Server.h"
+#include "..\include\InvertIndex.h"
+#include "..\include\Server.h"
 
 InvertedIndex SearchServer::GetInvertedIndex() 
 {
@@ -82,18 +82,6 @@ void SortById(std::vector<RelativeIndex>& input)
 	}
 }
 
-void RemoveDuplicate(std::vector<size_t>& vec) {
-	std::vector<size_t>::iterator itr = vec.begin();
-	std::unordered_set<size_t> set;
-	for (auto curr = vec.begin(); curr != vec.end(); ++curr)
-	{
-		if (set.insert(*curr).second) {
-			*itr++ = *curr;
-		}
-	}
-	vec.erase(itr, vec.end());
-}
-
 std::vector <size_t> Union(std::vector <size_t>& vector1,
 	std::vector <size_t>& vector2) 
 {
@@ -164,7 +152,7 @@ std::vector<RelativeIndex> SingleSearch(std::string request,
 		//  renew answer docs (id's) on every step
 		Ids = Union(Ids, newIds);
 	}
-	RemoveDuplicate(Ids);
+
 	//  7. calculate relevance
 	for (auto& El : Ids) //  answer docs ids
 	{  

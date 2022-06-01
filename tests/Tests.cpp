@@ -1,9 +1,9 @@
 #include <vector>
 #include <string>
 #include "gtest/gtest.h"
-#include "search_engine.h"
-#include "InvertIndex.h"
-#include "Server.h"
+#include "../include/search_engine.h"
+#include "../include/InvertIndex.h"
+#include "../include/Server.h"
 
 using namespace std;
 
@@ -136,4 +136,9 @@ TEST(TestCaseSearchServer, TestTop5) {
     ASSERT_EQ(result, expected);
 }
 
+int main() {
+
+    RUN_ALL_TESTS();
+
+}
 

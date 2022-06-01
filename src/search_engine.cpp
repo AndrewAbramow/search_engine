@@ -4,11 +4,10 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "gtest/gtest.h"
-#include "search_engine.h"
-#include "JSON.h"
-#include "InvertIndex.h"
-#include "Server.h"
+#include "..\include\search_engine.h"
+#include "..\include\JSON.h"
+#include "..\include\InvertIndex.h"
+#include "..\include\Server.h"
 
 int main()
 {
@@ -28,25 +27,19 @@ int main()
 
 	//  Inverted index part:
 	//  (pointer for SearchServer constructor)
-	InvertedIndex* newInvInd = new InvertedIndex();
+	InvertedIndex newInvInd;
 
 	//  update documents
-	newInvInd->UpdateDocumentBase(newJSON.GetTextDocuments());
+	newInvInd.UpdateDocumentBase(newJSON.GetTextDocuments());
 //________________________________________________________________
 
 	//  Search server part:
-	SearchServer* server = new SearchServer(*newInvInd);
+	SearchServer server(newInvInd);
 
 	auto requests = newJSON.GetRequests();
 
 	//search
-	auto answers = ConvertAnswer(server->search(requests));
+	auto answers = ConvertAnswer(server.search(requests));
 
 	newJSON.PutAnswers(answers);
-//________________________________________________________________
-
-	//  Memory clear:
-	delete newInvInd;
-	delete server;
-	//return RUN_ALL_TESTS();
 }

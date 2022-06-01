@@ -1,16 +1,16 @@
-#include <iostream>
+﻿#include <iostream>
 #include <fstream>
 #include <iomanip>
-#include "JSON.h"
+#include <filesystem>
+#include "..\include\JSON.h"
 #include "nlohmann/json.hpp"
 
 std::vector <std::string> ConverterJSON::GetTextDocuments() {
 
-	std::ifstream config("..\\config.json");  // open config file
+	// open config file
+	std::ifstream config("..\\..\\..\\resources\\config.json");  
 
 	nlohmann::json jObject;  // create new json object
-
-	//std::vector<std::string> documentsPaths;
 
 	std::vector<std::string> textDocuments;
 
@@ -68,8 +68,8 @@ std::vector <std::string> ConverterJSON::GetTextDocuments() {
 
 int ConverterJSON::GetResponsesLimit() 
 {
-
-	std::ifstream config("..\\config.json");  // open config file
+	// open config file
+	std::ifstream config("..\\..\\..\\resources\\config.json");  
 
 	nlohmann::json jObject;  // create new json object
 
@@ -99,8 +99,8 @@ int ConverterJSON::GetResponsesLimit()
 
 std::vector<std::string> ConverterJSON::GetRequests() 
 {
-
-	std::ifstream request("..\\requests.json");  // open requests file
+	// open requests file
+	std::ifstream request("..\\..\\..\\resources\\requests.json");  
 
 	nlohmann::json jObject;  // create new json object
 
@@ -164,7 +164,7 @@ double ToTwoDecimalPlaces(float f)
 void ConverterJSON::PutAnswers(std::vector<std::vector<std::pair<int, float>>>
 	results) 
 {
-	std::ofstream answer("../answers.json");
+	std::ofstream answer("..\\..\\..\\resources\\answers.json");
 
 	nlohmann::json jObject;
 

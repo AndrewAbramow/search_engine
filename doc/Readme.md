@@ -14,12 +14,18 @@ Search Engine uses a number of open source projects to work properly:
 - [nlohmann JSON](https://github.com/nlohmann/json) - JSON for Modern C++
 - [Thread Pool](https://github.com/skprpi/Habr/blob/main/thread_pool/best_version.cpp) - simple thread pool for C++
 
+## Requirements
+
+- C++ 17 compatitable compiler such as Clang or GCC
+- CMake
+
 ## Installation
 
-After cloning the repository, Search Engine will additionally need:
-- nlohmann library in root directory,
-- config.json, requests.json & answers.json in ../out/build directory
-- text files to be searched in ../out/build/resources.
+git clone https://github.com/AndrewAbramow/search_engine.git
+cd search_engine
+cmake -S . -B build
+cmake --build build
+cmake --build build -t test
 
 ## Example
 

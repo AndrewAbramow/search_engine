@@ -5,8 +5,8 @@
 #include <algorithm>
 #include <thread>
 #include <mutex>
-#include "ThreadPool.h"
-#include "InvertIndex.h"
+#include "..\include\ThreadPool.h"
+#include "..\include\InvertIndex.h"
 
 
 std::vector <Entry> InvertedIndex::GetWordCount(const std::string& word) 
@@ -56,41 +56,67 @@ size_t Count(std::string word, std::string line)
 	return count;
 }
 
+std::map<std::string, std::map<size_t, size_t>> ToOrderedDictionary(
+	std::map<std::string, std::vector<Entry>>& freqDictionary)
+{
+	std::map<std::string, std::map<size_t, size_t>> orderedDictionary;
+
+	for (auto& El : freqDictionary)  // words
+	{
+		for (auto& el : El.second)  //id's & counts
+		{
+			orderedDictionary[El.first][el.docId] = el.count;
+		}
+	}
+
+	return orderedDictionary;
+}
+
+std::map<std::string, std::vector<Entry>> ToFreqDictionary(
+	std::map<std::string, std::map<size_t, size_t>>& orderedDictionary)
+{
+	std::map<std::string, std::vector<Entry>> freqDictionary;
+
+	for (auto& El : orderedDictionary)  // words
+	{
+		for (auto& el : El.second)  //id's & counts
+		{
+			freqDictionary[El.first].push_back({ el.first,el.second });
+		}
+	}
+
+	return freqDictionary;
+}
+
 std::mutex safePushBack;
 
 void Indexing(size_t textId, std::vector<std::string> docs,
-	std::map<std::string, std::vector<Entry>>& freqDictionary) 
+	std::map<std::string, std::map<size_t, size_t>>& orderedDictionary)
 {
 	//  1. fill freq_dictionary with words -> keys & empty vectors -> values
-	for (auto& el : ParseDocs(docs[textId])) 
+
+	for (auto& el : ParseDocs(docs[textId]))
 	{
 		//  will fill in later
-		std::vector<Entry> blankVec;
-
-		freqDictionary[el] = blankVec;
+		orderedDictionary[el];
 	}
-	//  now freq_dictionary is a collection of unique words from text
+
 	//  2. make invert index for freq_dictionary
+
 	for (size_t i = 0; i < docs.size(); i++) 
 	{
-		for (auto& El : freqDictionary) 
+		for (auto& El : orderedDictionary)
 		{  
 			size_t counter = Count(El.first, docs[i]);
 
 			//  search word found in the document
 			if (counter > 0)
 			{
-				bool flag = true;
-
 				//  if this word has already been searched in the text
-				for (auto& el : El.second) 
-				{
-					if (el.docId == i) flag = false;
-				}
-				if (flag)
+				if (orderedDictionary[El.first].count(i) == 0)
 				{
 					std::lock_guard <std::mutex> lock (safePushBack);
-					El.second.push_back({ i,counter });
+					orderedDictionary[El.first][i] = counter;
 				}
 			}
 		}
@@ -131,7 +157,15 @@ void InvertedIndex::UpdateDocumentBase(std::vector<std::string> inputDocs)
 		newDocs = inputDocs;
 	}
 
-	std::map<std::string, std::vector<Entry>> newFreqDictionary = GetFreqDictionary();
+	std::map < std::string , std::vector<Entry >> newFreqDictionary = GetFreqDictionary();
+	
+	std::map < std::string , std::map<size_t, size_t >> orderedDictionary;
+
+
+	if (newFreqDictionary.size() > 0) {
+
+		orderedDictionary = ToOrderedDictionary(newFreqDictionary);
+	}
 
 	unsigned int numThreads = std::thread::hardware_concurrency()-1;
 
@@ -140,7 +174,7 @@ void InvertedIndex::UpdateDocumentBase(std::vector<std::string> inputDocs)
 	for (int i = 0; i < newDocs.size(); i++)
 	{
 		// indexing each (i) text in its own thread
-		threadPool.add_task(Indexing, i, newDocs, std::ref(newFreqDictionary));
+		threadPool.add_task(Indexing, i, newDocs, std::ref(orderedDictionary));
 
 		//Indexing (i, newDocs, newFreqDictionary);
 		std::cout << " doc indexing id: " << i << " started" << std::endl;
@@ -148,7 +182,7 @@ void InvertedIndex::UpdateDocumentBase(std::vector<std::string> inputDocs)
 	threadPool.wait_all();
 
 	//  update new_freq_dictionary
-	SetFreqDictionary(newFreqDictionary);
+	SetFreqDictionary(ToFreqDictionary(orderedDictionary));
 	std::cout<<"Freq_dictionary containing:\n";
 
 	for (auto& El : GetFreqDictionary()) 
