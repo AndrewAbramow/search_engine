@@ -12,7 +12,6 @@ add_subdirectory (nlohmann_json)
 add_subdirectory(tests)
 
 # Add source to this project's executable.
-
 add_executable (search_engine   "src/search_engine.cpp"
 								"src/JSON.cpp"
 								"src/InvertIndex.cpp"
@@ -20,3 +19,4 @@ add_executable (search_engine   "src/search_engine.cpp"
 								"src/ThreadPool.cpp")
 
 target_link_libraries(search_engine PRIVATE nlohmann_json::nlohmann_json)
+target_include_directories(search_engine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)

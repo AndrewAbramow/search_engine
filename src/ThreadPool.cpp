@@ -1,5 +1,5 @@
 
-#include "..\include\ThreadPool.h"
+#include "ThreadPool.h"
 
     void Task::operator() () 
     {

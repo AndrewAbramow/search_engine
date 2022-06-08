@@ -1,9 +1,9 @@
 #include <vector>
 #include <string>
 #include "gtest/gtest.h"
-#include "../include/search_engine.h"
-#include "../include/InvertIndex.h"
-#include "../include/Server.h"
+#include "search_engine.h"
+#include "InvertIndex.h"
+#include "Server.h"
 
 using namespace std;
 

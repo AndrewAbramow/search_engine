@@ -1,29 +1,7 @@
 {
     "answers": {
         "request001": {
-            "relevance": [
-                {
-                    "docid": 7,
-                    "rank": 1.0
-                },
-                {
-                    "docid": 14,
-                    "rank": 1.0
-                },
-                {
-                    "docid": 0,
-                    "rank": 0.67
-                },
-                {
-                    "docid": 1,
-                    "rank": 0.67
-                },
-                {
-                    "docid": 2,
-                    "rank": 0.67
-                }
-            ],
-            "result": true
+            "result": false
         }
     }
 }

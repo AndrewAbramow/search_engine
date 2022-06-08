@@ -5,8 +5,8 @@
 #include <cmath>
 #include <algorithm>
 #include <unordered_set>
-#include "..\include\InvertIndex.h"
-#include "..\include\Server.h"
+#include "InvertIndex.h"
+#include "Server.h"
 
 InvertedIndex SearchServer::GetInvertedIndex() 
 {
@@ -115,8 +115,8 @@ std::vector<RelativeIndex> SingleSearch(std::string request,
 		if (freqDictionary.count(El) > 0) 
 		{
 			WordOccurrence temp{ El, MaxCount(freqDictionary[El]) };
+			
 			// no repeats
-
 			bool flag = true;
 
 			for (auto& el : wordOccurrence) 
@@ -147,7 +147,7 @@ std::vector<RelativeIndex> SingleSearch(std::string request,
 		for (auto& el : freqDictionary[wordOccurrence[i].word]) 
 		{
 			newIds.push_back(el.docId);
-			std::cout << wordOccurrence[i].word << " - " << el.docId << std::endl;
+			/*std::cout << wordOccurrence[i].word << " - " << el.docId << std::endl;*/
 		}
 		//  renew answer docs (id's) on every step
 		Ids = Union(Ids, newIds);
@@ -221,11 +221,11 @@ std::vector<std::vector<RelativeIndex>> SearchServer::search(const
 		}
 		maxRelevance.push_back(temp);
 	}
-	std::cout << "Max relevance is: \n";
+	/*std::cout << "Max relevance is: \n";
 	for (auto& el : maxRelevance) 
 	{
 		std::cout << el << std::endl;
-	}
+	}*/
 	//  7. relative relevance
 	std::vector < std::vector <RelativeIndex>> listOfRelRelev;
 
@@ -250,7 +250,7 @@ std::vector<std::vector<RelativeIndex>> SearchServer::search(const
 		listOfRelRelev.push_back(temp);
 	}
 
-	std::cout << "Absolute relevance is: \n";
+	/*std::cout << "Absolute relevance is: \n";
 
 	for (auto& El : listOfRelevance)
 	{
@@ -271,7 +271,7 @@ std::vector<std::vector<RelativeIndex>> SearchServer::search(const
 				<< " : rank - " << el.rank << std::endl;
 		}
 		std::cout << std::endl;
-	}
+	}*/
 
 	return listOfRelRelev;
 }

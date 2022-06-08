@@ -5,8 +5,8 @@
 #include <algorithm>
 #include <thread>
 #include <mutex>
-#include "..\include\ThreadPool.h"
-#include "..\include\InvertIndex.h"
+#include "ThreadPool.h"
+#include "InvertIndex.h"
 
 
 std::vector <Entry> InvertedIndex::GetWordCount(const std::string& word) 
@@ -88,35 +88,35 @@ std::map<std::string, std::vector<Entry>> ToFreqDictionary(
 	return freqDictionary;
 }
 
-std::mutex safePushBack;
+std::mutex safeAdd;
 
 void Indexing(size_t textId, std::vector<std::string> docs,
 	std::map<std::string, std::map<size_t, size_t>>& orderedDictionary)
 {
-	//  1. fill freq_dictionary with words -> keys & empty vectors -> values
+	std::vector<std::string> parsedWords;
 
+	//  1. parse words from documents
 	for (auto& el : ParseDocs(docs[textId]))
 	{
-		//  will fill in later
-		orderedDictionary[el];
+		parsedWords.push_back(el);
 	}
 
 	//  2. make invert index for freq_dictionary
-
 	for (size_t i = 0; i < docs.size(); i++) 
 	{
-		for (auto& El : orderedDictionary)
+		for (auto& El : parsedWords)
 		{  
-			size_t counter = Count(El.first, docs[i]);
+			size_t counter = Count(El, docs[i]);
 
 			//  search word found in the document
 			if (counter > 0)
 			{
+				std::lock_guard <std::mutex> lock(safeAdd);
+
 				//  if this word has already been searched in the text
-				if (orderedDictionary[El.first].count(i) == 0)
+				if (orderedDictionary[El].count(i) == 0)
 				{
-					std::lock_guard <std::mutex> lock (safePushBack);
-					orderedDictionary[El.first][i] = counter;
+					orderedDictionary[El][i] = counter;
 				}
 			}
 		}
@@ -151,7 +151,7 @@ void InvertedIndex::UpdateDocumentBase(std::vector<std::string> inputDocs)
 		SetDocs(newDocs);
 	}
 	else {
-		std::cout << "input_docs is empty" << std::endl;
+		/*std::cout << "input_docs is empty" << std::endl;*/
 		SetDocs(inputDocs);
 
 		newDocs = inputDocs;
@@ -161,8 +161,8 @@ void InvertedIndex::UpdateDocumentBase(std::vector<std::string> inputDocs)
 	
 	std::map < std::string , std::map<size_t, size_t >> orderedDictionary;
 
-
-	if (newFreqDictionary.size() > 0) {
+	if (newFreqDictionary.size() > 0) 
+	{
 
 		orderedDictionary = ToOrderedDictionary(newFreqDictionary);
 	}
@@ -177,13 +177,13 @@ void InvertedIndex::UpdateDocumentBase(std::vector<std::string> inputDocs)
 		threadPool.add_task(Indexing, i, newDocs, std::ref(orderedDictionary));
 
 		//Indexing (i, newDocs, newFreqDictionary);
-		std::cout << " doc indexing id: " << i << " started" << std::endl;
+		/*std::cout << " doc indexing id: " << i << " started" << std::endl;*/
 	}
 	threadPool.wait_all();
 
 	//  update new_freq_dictionary
 	SetFreqDictionary(ToFreqDictionary(orderedDictionary));
-	std::cout<<"Freq_dictionary containing:\n";
+	/*std::cout<<"Freq_dictionary containing:\n";
 
 	for (auto& El : GetFreqDictionary()) 
 	{
@@ -194,5 +194,5 @@ void InvertedIndex::UpdateDocumentBase(std::vector<std::string> inputDocs)
 			std::cout << "\t" <<
 			el.docId << " : " << el.count << std::endl;
 		}
-	}
+	}*/
 }

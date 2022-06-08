@@ -4,10 +4,10 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "..\include\search_engine.h"
-#include "..\include\JSON.h"
-#include "..\include\InvertIndex.h"
-#include "..\include\Server.h"
+#include "search_engine.h"
+#include "JSON.h"
+#include "InvertIndex.h"
+#include "Server.h"
 
 int main()
 {
@@ -15,14 +15,14 @@ int main()
 	ConverterJSON newJSON;
 
 	//  list of requests
-	for (auto& el : newJSON.GetRequests()) 
+	/*for (auto& el : newJSON.GetRequests()) 
 	{
 		std::cout << el << std::endl;
-	}
+	}*/
 
 	//  response limit
-	std::cout << "Response limit is: " <<
-		newJSON.GetResponsesLimit() << std::endl;
+	/*std::cout << "Response limit is: " <<
+		newJSON.GetResponsesLimit() << std::endl;*/
 //________________________________________________________________
 
 	//  Inverted index part:

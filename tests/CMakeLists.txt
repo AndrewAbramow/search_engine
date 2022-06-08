@@ -29,6 +29,7 @@ add_executable (test_engine      "Tests.cpp"
 								 "../src/ThreadPool.cpp")
 target_link_libraries(test_engine PRIVATE nlohmann_json::nlohmann_json gtest_main)
 include(GoogleTest)
+include_directories(../include)
 gtest_discover_tests(test_engine)
 
 # TODO: Add tests and install targets if needed.
