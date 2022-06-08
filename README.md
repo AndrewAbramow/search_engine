@@ -34,4 +34,3 @@ Search Engine uses a number of open source projects to work properly:
 - cd ../search_engine/build/Mingw64-Release
 -  ./search_engine.exe
 - The answer will be waiting for you in the answers.json
-
